@@ -10,7 +10,7 @@ module.exports = (app) => {
     "/cms/api/v1/courses",
     [
       authJwt.verifyToken,
-      authJwt.isAdminApproved,
+      authJwt.isAdminApprovedOrSuperAdmin,
       validateCourseRequestBodies.newCourseBody,
     ],
     courseController.createNewCourse
@@ -19,7 +19,7 @@ module.exports = (app) => {
     "/cms/api/v1/courses/:id",
     [
       authJwt.verifyToken,
-      authJwt.isAdminApproved,
+      authJwt.isAdminApprovedOrSuperAdmin,
       validateIdInParams.courseInParams,
       validateCourseRequestBodies.editCourseBody,
     ],
@@ -29,7 +29,7 @@ module.exports = (app) => {
     "/cms/api/v1/courses/:id",
     [
       authJwt.verifyToken,
-      authJwt.isAdminApproved,
+      authJwt.isAdminApprovedOrSuperAdmin,
       validateIdInParams.courseInParams,
     ],
     courseController.deleteCourse

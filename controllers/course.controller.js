@@ -7,14 +7,12 @@ exports.createNewCourse = async (req, res) => {
       title: req.body.title,
       courseId: req.body.courseId,
       description: req.body.description,
-      casts: req.body.casts,
       vedioUrls: req.body.vedioUrls,
       topics: req.body.topics,
       duration: req.body.duration,
       category: req.body.category,
-      courseStatus: req.body.courseStatus,
     };
-
+    data.courseStatus = constants.courseStatus.pending;
     const course = await Course.create(data);
 
     console.log(`#### New Course '${course.title}' created ####`);
@@ -86,6 +84,7 @@ exports.deleteCourse = async (req, res) => {
 exports.getAllCourses = async (req, res) => {
   try {
     const courses = await Course.find();
+    console.log(courses);
 
     const approvedCourses = courses.filter((course) => {
       return course.courseStatus == constants.courseStatus.approved;

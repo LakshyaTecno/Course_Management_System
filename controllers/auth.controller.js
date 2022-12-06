@@ -50,7 +50,7 @@ exports.signin = async (req, res) => {
     }
     if (user.userStatus == constants.userStatus.pending) {
       return res.status(400).send({
-        message: "Not Yet Approved by the ADMIN",
+        message: "Not Yet Approved by the SUPERADMIN",
       });
     }
     const passwordIsValid = bcrypt.compareSync(

@@ -85,13 +85,12 @@ exports.getAllCourses = async (req, res) => {
   try {
     const courses = await Course.find();
     console.log(courses);
-
-    const approvedCourses = courses.filter((course) => {
-      return course.courseStatus == constants.courseStatus.approved;
-    });
     if (user.role == constants.roles.employee) {
+      const approvedCourses = courses.filter((course) => {
+        return course.courseStatus == constants.courseStatus.approved;
+      });
       res.status(200).send(approvedCourses);
-    } else if (user.role != constants.roles.employee) {
+    } else {
       res.status(200).send(courses);
     }
   } catch (err) {

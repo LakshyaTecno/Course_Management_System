@@ -1,4 +1,5 @@
 const constants = require("../utils/constants");
+const Course = require("../models/courseSchema");
 
 const allowedCourseStatus = [
   constants.courseStatus.approved,
@@ -49,9 +50,9 @@ const newCourseBody = async (req, res, next) => {
     }
 
     next();
-  } catch {
+  } catch (err) {
     console.log(
-      "#### Error while velidating new Course request body ##### ",
+      "#### Error while validating new Course request body ##### ",
       err.message
     );
     res.status(500).send({

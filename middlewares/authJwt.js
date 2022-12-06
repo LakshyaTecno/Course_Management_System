@@ -32,11 +32,22 @@ const verifyToken = (req,res,next)=>{
 
 const isAdmin = async (req,res,next)=>{
     const user = req.user;
-    if (user && user.userType == constants.userTypes.admin){
+    if (user && user.role == constants.roles.admin){
         next();
     }else{
         return res.status(403).send({
             message : "only ADMIN users are allowed to access this endpoint"
+        })
+    }
+}
+
+const isAdminApproved = async (req,res,next)=>{
+    const user = req.user;
+    if (user && user.role == constants.roles.admin && user.userStatus == constants.userStatus.approved){
+        next();
+    }else{
+        return res.status(403).send({
+            message : "only Approved ADMIN users are allowed to access this endpoint"
         })
     }
 }
@@ -60,6 +71,7 @@ const authJwt = {
     verifyToken,
     isAdmin,
     isSuperAdmin,
+    isAdminApproved
 }
 
 module.exports = authJwt

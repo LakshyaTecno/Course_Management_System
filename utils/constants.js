@@ -4,8 +4,12 @@ module.exports = {
       admin: "ADMIN",
       superAdmin: "SUPERADMIN",
     },
-  
     userStatus: {
+      pending: "PENDING",
+      approved: "APPROVED",
+      rejected: "REJECTED",
+    },
+    courseStatus: {
       pending: "PENDING",
       approved: "APPROVED",
       rejected: "REJECTED",

@@ -28,8 +28,9 @@ exports.createNewCourse = async (req, res) => {
 exports.updateCourse = async (req, res) => {
   try {
     const course = req.courseInParams;
+    const user = req.user;
 
-    (course.title = req.body.title ? req.body.title : course.name),
+    (course.title = req.body.title ? req.body.title : course.title),
       (course.description = req.body.description
         ? req.body.description
         : course.description),
@@ -47,11 +48,17 @@ exports.updateCourse = async (req, res) => {
         ? req.body.category
         : course.category);
 
-    if (req.user.role == constants.roles.superAdmin) {
-      course.courseStatus =
-        req.body.courseStatus != undefined
-          ? req.body.courseStatus
-          : course.courseStatus;
+    if (req.body.courseStatus) {
+      if (user.role == constants.roles.superAdmin) {
+        course.courseStatus =
+          req.body.courseStatus != undefined
+            ? req.body.courseStatus
+            : course.courseStatus;
+      } else {
+        return res.status(400).send({
+          message: "Failed ! CourseStatus is only changed by SuperAdmin ",
+        });
+      }
     }
 
     const updatedCourse = await course.save();
@@ -84,6 +91,8 @@ exports.deleteCourse = async (req, res) => {
 exports.getAllCourses = async (req, res) => {
   try {
     const courses = await Course.find();
+    const user = req.user;
+    console.log(user);
     console.log(courses);
     if (user.role == constants.roles.employee) {
       const approvedCourses = courses.filter((course) => {
@@ -104,7 +113,7 @@ exports.getAllCourses = async (req, res) => {
 exports.getSingleCourse = async (req, res) => {
   try {
     const course = req.courseInParams;
-    const user = req.userInParams;
+    const user = req.user;
 
     if (
       user.role == constants.roles.employee &&
@@ -114,7 +123,9 @@ exports.getSingleCourse = async (req, res) => {
     } else if (user.role != constants.roles.employee) {
       res.status(200).send(course);
     } else {
-      res.status(200).send({});
+      res.status(400).send({
+        message: "Failed ! Course is not approved yet ",
+      });
     }
   } catch (err) {
     console.log("#### Error while getting the course ####", err.message);

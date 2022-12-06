@@ -90,10 +90,16 @@ exports.deleteCourse = async (req, res) => {
 
 exports.getAllCourses = async (req, res) => {
   try {
-    const courses = await Course.find();
+    const isSortTrue = req.query.Sort;
+
+    if (isSortTrue) {
+      var courses = await Course.find().sort({ category: 1 });
+    } else {
+      var courses = await Course.find();
+    }
+
     const user = req.user;
-    console.log(user);
-    console.log(courses);
+
     if (user.role == constants.roles.employee) {
       const approvedCourses = courses.filter((course) => {
         return course.courseStatus == constants.courseStatus.approved;
